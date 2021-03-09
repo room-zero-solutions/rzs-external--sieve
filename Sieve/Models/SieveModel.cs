@@ -27,6 +27,9 @@ namespace Sieve.Models
         [DataMember, Range(1, int.MaxValue)]
         public int? PageSize { get; set; }
 
+        [DataMember, Range(0, int.MaxValue)]
+        public int PrePaginationCount { get; set; }
+
         public List<TFilterTerm> GetFiltersParsed()
         {
             if (Filters != null)

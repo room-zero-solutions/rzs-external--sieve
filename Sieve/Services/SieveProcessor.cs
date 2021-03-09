@@ -61,13 +61,14 @@ namespace Sieve.Services
         private readonly IOptions<SieveOptions> _options;
         private readonly ISieveCustomSortMethods _customSortMethods;
         private readonly ISieveCustomFilterMethods _customFilterMethods;
-        private readonly SievePropertyMapper mapper = new SievePropertyMapper();
+        private SievePropertyMapper _mapper = new SievePropertyMapper();
+
+        private bool _isMapped;
 
         public SieveProcessor(IOptions<SieveOptions> options,
             ISieveCustomSortMethods customSortMethods,
             ISieveCustomFilterMethods customFilterMethods)
         {
-            mapper = MapProperties(mapper);
             _options = options;
             _customSortMethods = customSortMethods;
             _customFilterMethods = customFilterMethods;
@@ -76,7 +77,6 @@ namespace Sieve.Services
         public SieveProcessor(IOptions<SieveOptions> options,
             ISieveCustomSortMethods customSortMethods)
         {
-            mapper = MapProperties(mapper);
             _options = options;
             _customSortMethods = customSortMethods;
         }
@@ -84,14 +84,12 @@ namespace Sieve.Services
         public SieveProcessor(IOptions<SieveOptions> options,
             ISieveCustomFilterMethods customFilterMethods)
         {
-            mapper = MapProperties(mapper);
             _options = options;
             _customFilterMethods = customFilterMethods;
         }
 
         public SieveProcessor(IOptions<SieveOptions> options)
         {
-            mapper = MapProperties(mapper);
             _options = options;
         }
 
@@ -369,6 +367,8 @@ namespace Sieve.Services
 
             if (pageSize > 0)
             {
+                model.PrePaginationCount = result.Count();
+
                 result = result.Skip((page - 1) * pageSize);
                 result = result.Take(Math.Min(pageSize, maxPageSize));
             }
@@ -386,7 +386,14 @@ namespace Sieve.Services
             bool canFilterRequired,
             string name)
         {
-            var property = mapper.FindProperty<TEntity>(canSortRequired, canFilterRequired, name, _options.Value.CaseSensitive);
+            if (!_isMapped)
+            {
+                _mapper = MapProperties(_mapper);
+
+                _isMapped = true;
+            }
+
+            var property = _mapper.FindProperty<TEntity>(canSortRequired, canFilterRequired, name, _options.Value.CaseSensitive);
             if (property.Item1 == null)
             {
                 var prop = FindPropertyBySieveAttribute<TEntity>(canSortRequired, canFilterRequired, name, _options.Value.CaseSensitive);

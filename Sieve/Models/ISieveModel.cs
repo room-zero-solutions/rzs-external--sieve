@@ -4,7 +4,6 @@ namespace Sieve.Models
 {
     public interface ISieveModel : ISieveModel<IFilterTerm, ISortTerm>
     {
-
     }
 
     public interface ISieveModel<TFilterTerm, TSortTerm>
@@ -18,6 +17,8 @@ namespace Sieve.Models
         int? Page { get; set; }
 
         int? PageSize { get; set; }
+
+        int PrePaginationCount { get; set; }
 
         List<TFilterTerm> GetFiltersParsed();
 

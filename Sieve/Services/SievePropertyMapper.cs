@@ -32,8 +32,9 @@ namespace Sieve.Services
                 _sievePropertyMapper = sievePropertyMapper;
                 (_fullName, _property) = GetPropertyInfo(expression);
                 _name = _fullName;
-                _canFilter = false;
-                _canSort = false;
+                _canFilter = true;
+                _canSort = true;
+                UpdateMap();
             }
 
             private string _name;
