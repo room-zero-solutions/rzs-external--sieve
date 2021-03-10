@@ -1,7 +1,7 @@
 ﻿using System.Linq;
-using Sieve.Models;
+using RzsSieve.Models;
 
-namespace Sieve.Services
+namespace RzsSieve.Services
 {
     public interface ISieveProcessor : ISieveProcessor<SieveModel, FilterTerm, SortTerm>
     {

@@ -1,4 +1,4 @@
-﻿namespace Sieve.Models
+﻿namespace RzsSieve.Models
 {
     public interface IFilterTerm
     {

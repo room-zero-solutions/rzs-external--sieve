@@ -1,4 +1,4 @@
-﻿namespace Sieve.Services
+﻿namespace RzsSieve.Services
 {
     public interface ISieveCustomSortMethods
     {

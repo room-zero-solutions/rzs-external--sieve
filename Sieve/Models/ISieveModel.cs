@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Sieve.Models
+namespace RzsSieve.Models
 {
     public interface ISieveModel : ISieveModel<IFilterTerm, ISortTerm>
     {

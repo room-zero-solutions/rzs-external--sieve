@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
-using SieveTests.Entities;
+using RzsSieveTests.Entities;
 using System;
 
-namespace SieveTests.Migrations
+namespace RzsSieveTests.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20180127005347_Init")]

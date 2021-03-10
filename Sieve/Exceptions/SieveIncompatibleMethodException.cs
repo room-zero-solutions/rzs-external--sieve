@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sieve.Exceptions
+namespace RzsSieve.Exceptions
 {
     public class SieveIncompatibleMethodException : SieveException
     {

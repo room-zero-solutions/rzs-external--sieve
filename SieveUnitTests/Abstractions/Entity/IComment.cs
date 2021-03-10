@@ -1,4 +1,4 @@
-﻿namespace SieveUnitTests.Abstractions.Entity
+﻿namespace RzsSieveUnitTests.Abstractions.Entity
 {
     public interface IComment: IBaseEntity
     {

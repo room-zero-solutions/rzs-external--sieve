@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Sieve.Models;
+using RzsSieve.Models;
 
-namespace Sieve.Services
+namespace RzsSieve.Services
 {
     public class SievePropertyMapper
     {

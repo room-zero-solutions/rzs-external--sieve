@@ -1,20 +1,25 @@
-﻿using Sieve.Attributes;
-using SieveUnitTests.Entities;
+﻿using RzsSieve.Attributes;
+using RzsSieveUnitTests.Entities;
 
-namespace SieveUnitTests.Abstractions.Entity
+namespace RzsSieveUnitTests.Abstractions.Entity
 {
-    public interface IPost: IBaseEntity
+    public interface IPost : IBaseEntity
     {
         [Sieve(CanFilter = true, CanSort = true)]
         string Title { get; set; }
+
         [Sieve(CanFilter = true, CanSort = true)]
         int LikeCount { get; set; }
+
         [Sieve(CanFilter = true, CanSort = true)]
         int CommentCount { get; set; }
+
         [Sieve(CanFilter = true, CanSort = true)]
         int? CategoryId { get; set; }
+
         [Sieve(CanFilter = true, CanSort = true)]
         bool IsDraft { get; set; }
+
         string ThisHasNoAttribute { get; set; }
         string ThisHasNoAttributeButIsAccessible { get; set; }
         int OnlySortableViaFluentApi { get; set; }

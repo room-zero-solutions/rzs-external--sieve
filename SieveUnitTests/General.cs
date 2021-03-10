@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Sieve.Exceptions;
-using Sieve.Models;
-using Sieve.Services;
-using SieveUnitTests.Abstractions.Entity;
-using SieveUnitTests.Entities;
-using SieveUnitTests.Services;
+using RzsSieve.Exceptions;
+using RzsSieve.Models;
+using RzsSieve.Services;
+using RzsSieveUnitTests.Entities;
+using RzsSieveUnitTests.Services;
 
-namespace SieveUnitTests
+namespace RzsSieveUnitTests
 {
     [TestClass]
     public class General

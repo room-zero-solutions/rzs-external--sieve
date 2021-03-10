@@ -1,9 +1,9 @@
 ﻿using System.Linq;
-using Sieve.Services;
-using SieveUnitTests.Abstractions.Entity;
-using SieveUnitTests.Entities;
+using RzsSieve.Services;
+using RzsSieveUnitTests.Abstractions.Entity;
+using RzsSieveUnitTests.Entities;
 
-namespace SieveUnitTests.Services
+namespace RzsSieveUnitTests.Services
 {
     public class SieveCustomSortMethods : ISieveCustomSortMethods
     {

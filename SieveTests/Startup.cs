@@ -8,12 +8,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Sieve.Models;
-using Sieve.Services;
-using SieveTests.Entities;
-using SieveTests.Services;
+using RzsSieve.Models;
+using RzsSieve.Services;
+using RzsSieveTests.Entities;
+using RzsSieveTests.Services;
 
-namespace SieveTests
+namespace RzsSieveTests
 {
     public class Startup
     {

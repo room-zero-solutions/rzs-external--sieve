@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace SieveTests
+namespace RzsSieveTests
 {
     public static class Program
     {

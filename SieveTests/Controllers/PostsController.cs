@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Sieve.Models;
-using Sieve.Services;
-using SieveTests.Entities;
+using RzsSieve.Models;
+using RzsSieve.Services;
+using RzsSieveTests.Entities;
 
-namespace SieveTests.Controllers
+namespace RzsSieveTests.Controllers
 {
     [Route("api/[controller]/[action]")]
     public class PostsController : Controller

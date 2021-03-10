@@ -1,4 +1,4 @@
-﻿namespace Sieve.Extensions
+﻿namespace RzsSieve.Extensions
 {
     using System.Diagnostics.Contracts;
     using System.Linq.Expressions;

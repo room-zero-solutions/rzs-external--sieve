@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
-using Sieve.Models;
+using RzsSieve.Models;
 
-namespace SieveUnitTests.Services
+namespace RzsSieveUnitTests.Services
 {
     public class SieveOptionsAccessor : IOptions<SieveOptions>
     {

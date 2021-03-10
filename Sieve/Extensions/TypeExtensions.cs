@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sieve.Extensions
+namespace RzsSieve.Extensions
 {
     public static partial class TypeExtensions
     {

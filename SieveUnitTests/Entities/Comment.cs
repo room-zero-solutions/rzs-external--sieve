@@ -1,7 +1,7 @@
-﻿using Sieve.Attributes;
-using SieveUnitTests.Abstractions.Entity;
+﻿using RzsSieve.Attributes;
+using RzsSieveUnitTests.Abstractions.Entity;
 
-namespace SieveUnitTests.Entities
+namespace RzsSieveUnitTests.Entities
 {
     public class Comment : BaseEntity, IComment
     {

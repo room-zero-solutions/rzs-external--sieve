@@ -3,7 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Sieve.Extensions
+namespace RzsSieve.Extensions
 {
     public static partial class LinqExtensions
     {

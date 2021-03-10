@@ -5,12 +5,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Microsoft.Extensions.Options;
-using Sieve.Attributes;
-using Sieve.Exceptions;
-using Sieve.Extensions;
-using Sieve.Models;
+using RzsSieve.Attributes;
+using RzsSieve.Exceptions;
+using RzsSieve.Extensions;
+using RzsSieve.Models;
 
-namespace Sieve.Services
+namespace RzsSieve.Services
 {
     public class SieveProcessor : SieveProcessor<SieveModel, FilterTerm, SortTerm>, ISieveProcessor
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using Sieve.Attributes;
+using RzsSieve.Attributes;
 
-namespace SieveTests.Entities
+namespace RzsSieveTests.Entities
 {
     public class Post
     {
@@ -13,7 +13,6 @@ namespace SieveTests.Entities
 
         [Sieve(CanFilter = true, CanSort = true)]
         public int LikeCount { get; set; } = new Random().Next(0, 1000);
-
 
         [Sieve(CanFilter = true, CanSort = true)]
         public int CommentCount { get; set; } = new Random().Next(0, 1000);

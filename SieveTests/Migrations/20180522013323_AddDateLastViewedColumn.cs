@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace SieveTests.Migrations
+namespace RzsSieveTests.Migrations
 {
     public partial class AddDateLastViewedColumn : Migration
     {

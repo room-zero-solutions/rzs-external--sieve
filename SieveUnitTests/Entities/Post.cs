@@ -1,12 +1,11 @@
 ﻿using System;
-using Sieve.Attributes;
-using SieveUnitTests.Abstractions.Entity;
+using RzsSieve.Attributes;
+using RzsSieveUnitTests.Abstractions.Entity;
 
-namespace SieveUnitTests.Entities
+namespace RzsSieveUnitTests.Entities
 {
     public class Post : BaseEntity, IPost
     {
-
         [Sieve(CanFilter = true, CanSort = true)]
         public string Title { get; set; } = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 8);
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Sieve.Extensions
+namespace RzsSieve.Extensions
 {
     // The default GetMethod doesn't allow for generic methods which means
     // custom filters for different sources can't share the same name.

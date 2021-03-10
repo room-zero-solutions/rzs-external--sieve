@@ -1,13 +1,13 @@
 ﻿using System;
-using Sieve.Models;
+using RzsSieve.Models;
 
-namespace Sieve.Attributes
+namespace RzsSieve.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class SieveAttribute : Attribute, ISievePropertyMetadata
     {
         /// <summary>
-        /// Override name used 
+        /// Override name used
         /// </summary>
         public string Name { get; set; }
 

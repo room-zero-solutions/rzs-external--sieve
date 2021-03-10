@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 
-namespace Sieve.Models
+namespace RzsSieve.Models
 {
     public class SieveModel : SieveModel<FilterTerm, SortTerm> { }
 
