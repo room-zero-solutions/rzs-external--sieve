@@ -41,4 +41,4 @@ jobs:
       run: ls -R
 
     - name: Publish
-      run: dotnet nuget push ./Sieve/bin/Release/RzsSieve.2.3.3.nupkg --skip-duplicate --no-symbols true
+      run: dotnet nuget push ./Sieve/bin/Release/RzsSieve.2.3.3.nupkg --api-key ${{ secrets.MACHINE_REPO_PAT_2 }} --skip-duplicate --no-symbols true
