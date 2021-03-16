@@ -40,5 +40,5 @@ jobs:
     - name: View
       run: ls -R
 
-    #- name: Publish
-    #  run: dotnet nuget push ./Sieve/bin/Release/RzsSieve.2.3.3.nupkg" --skip-duplicate --no-symbols true
+    - name: Publish
+      run: dotnet nuget push ./Sieve/bin/Release/RzsSieve.2.3.3.nupkg" --skip-duplicate --no-symbols true
