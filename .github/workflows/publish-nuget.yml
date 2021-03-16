@@ -23,7 +23,10 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-    
+        source-url: https://nuget.pkg.github.com/room-zero-solutions/index.json
+      env:
+        NUGET_AUTH_TOKEN: ${{ secrets.MACHINE_REPO_PAT }}
+
     - name: View
       run: |
         ls
@@ -32,10 +35,10 @@ jobs:
       run: dotnet restore 
     
     - name: Build
-      run: dotnet build -c Release --no-restore
+      run: dotnet pack -c Release
 
-    #- name: View
-    #  run: ls -R
+    - name: View
+      run: ls -R
 
-    - name: Publish
-      run: dotnet nuget push "./Sieve/bin/Release/RzsSieve.2.3.3.nupkg"  --api-key ${{ secrets.MACHINE_REPO_PAT }} --source "github"
+    #- name: Publish
+    #  run: dotnet nuget push ./Sieve/bin/Release/RzsSieve.2.3.3.nupkg" --skip-duplicate --no-symbols true
