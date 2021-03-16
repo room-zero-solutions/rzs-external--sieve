@@ -24,17 +24,18 @@ jobs:
       with:
         dotnet-version: 5.0.x
     
-    #- name: Restore dependencies
-    #  run: dotnet restore
-    
-    #- name: Build
-    #  run: dotnet build --no-restore
-    
-    #- name: Test
-    #  run: dotnet test --no-build --verbosity normal
-
     - name: View
       run: |
         ls
-        
+
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: View
+      run: |
+        ls -R
+            
 #        dotnet nuget push "bin/Release/OctocatApp.1.0.0.nupkg"  --api-key YOUR_GITHUB_PAT --source "github"
