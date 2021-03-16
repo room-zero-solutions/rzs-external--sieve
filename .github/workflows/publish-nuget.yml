@@ -25,7 +25,7 @@ jobs:
         dotnet-version: 5.0.x
         source-url: https://nuget.pkg.github.com/room-zero-solutions/index.json
       env:
-        NUGET_AUTH_TOKEN: ${{ secrets.MACHINE_REPO_PAT }}
+        NUGET_AUTH_TOKEN: ${{ secrets.MACHINE_REPO_PAT_2 }}
 
     - name: View
       run: |
