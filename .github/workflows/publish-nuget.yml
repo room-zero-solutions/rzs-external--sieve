@@ -35,7 +35,7 @@ jobs:
       run: dotnet restore 
     
     - name: Build
-      run: dotnet buil -c Release
+      run: dotnet build -c Release
 
     - name: View
       run: ls -R
