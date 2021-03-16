@@ -19,7 +19,8 @@
 
     <Authors>room-zero-solutions</Authors>
     <Company>room-zero-solutions</Company>
-    <RepositoryUrl>https://github.com/room-zero-solutions/rzs-nuget</RepositoryUrl>
+
+    <RepositoryUrl>https://github.com/room-zero-solutions/RzsSieve</RepositoryUrl>
 
     <PackageId>RzsSieve</PackageId>
     <Product>RzsSieve</Product>
