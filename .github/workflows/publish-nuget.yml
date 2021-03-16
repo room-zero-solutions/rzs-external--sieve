@@ -34,8 +34,8 @@ jobs:
     - name: Build
       run: dotnet build -c Release --no-restore
 
-    - name: View
-      run: |
-        ls -R
-            
-#        dotnet nuget push "bin/Release/OctocatApp.1.0.0.nupkg"  --api-key YOUR_GITHUB_PAT --source "github"
+    #- name: View
+    #  run: ls -R
+
+    - name: Publish
+      run: dotnet nuget push "./Sieve/bin/Release/RzsSieve.2.3.3.nupkg"  --api-key ${{ secrets.MACHINE_REPO_PAT }} --source "github"
