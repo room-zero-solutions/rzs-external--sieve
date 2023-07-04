@@ -10,5 +10,10 @@
         LessThanOrEqualTo,
         Contains,
         StartsWith,
+        DateEquals,
+        DateGreaterThanOrEqualTo,
+        DateLessThanOrEqualTo,
+        DateGreaterThan,
+        DateLessThan
     }
 }

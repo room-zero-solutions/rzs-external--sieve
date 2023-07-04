@@ -32,7 +32,8 @@ namespace RzsSieveUnitTests
                     IsDraft = true,
                     CategoryId = null,
                     TopComment = new Comment { Id = 0, Text = "A1" },
-                    FeaturedComment = new Comment { Id = 4, Text = "A2" }
+                    FeaturedComment = new Comment { Id = 4, Text = "A2" },
+                    Created = DateTime.Parse("2020-01-01")
                 },
                 new Post() {
                     Id = 1,
@@ -41,7 +42,8 @@ namespace RzsSieveUnitTests
                     IsDraft = false,
                     CategoryId = 1,
                     TopComment = new Comment { Id = 3, Text = "B1" },
-                    FeaturedComment = new Comment { Id = 5, Text = "B2" }
+                    FeaturedComment = new Comment { Id = 5, Text = "B2" },
+                    Created = DateTime.Parse("2020-01-01 11:00:00")
                 },
                 new Post() {
                     Id = 2,
@@ -49,7 +51,8 @@ namespace RzsSieveUnitTests
                     LikeCount = 0,
                     CategoryId = 1,
                     TopComment = new Comment { Id = 2, Text = "C1" },
-                    FeaturedComment = new Comment { Id = 6, Text = "C2" }
+                    FeaturedComment = new Comment { Id = 6, Text = "C2" },
+                    Created = DateTime.Parse("2020-01-02")
                 },
                 new Post() {
                     Id = 3,
@@ -58,7 +61,8 @@ namespace RzsSieveUnitTests
                     IsDraft = true,
                     CategoryId = 2,
                     TopComment = new Comment { Id = 1, Text = "D1" },
-                    FeaturedComment = new Comment { Id = 7, Text = "D2" }
+                    FeaturedComment = new Comment { Id = 7, Text = "D2" },
+                    Created = DateTime.Parse("2020-01-02 13:22:22")
                 },
             }.AsQueryable();
 
@@ -80,6 +84,81 @@ namespace RzsSieveUnitTests
                     Text = "This is a brand new comment. (Text in braces)"
                 },
             }.AsQueryable();
+        }
+        
+        [TestMethod]
+        public void DateEqualsMatchesDateTimeWithOrWithoutTimeComponent()
+        {
+            var model = new SieveModel()
+            {
+                Filters = "Created#=2020-01-01"
+            };
+
+            var result = _processor.Apply(model, _posts);
+
+            Assert.AreEqual(result.ElementAt(0).Id, 0);
+            Assert.AreEqual(result.ElementAt(1).Id, 1);
+            Assert.IsTrue(result.Count() == 2);
+        }
+
+        [TestMethod]
+        public void DateGreaterThanOrEqualMatchesDateTimeWithOrWithoutTimeComponent()
+        {
+            var model = new SieveModel()
+            {
+                Filters = "Created#>=2020-01-02"
+            };
+
+            var result = _processor.Apply(model, _posts);
+
+            Assert.AreEqual(result.ElementAt(0).Id, 2);
+            Assert.AreEqual(result.ElementAt(1).Id, 3);
+            Assert.IsTrue(result.Count() == 2);
+        }
+        
+        [TestMethod]
+        public void DateLessThanOrEqualMatchesDateTimeWithOrWithoutTimeComponent()
+        {
+            var model = new SieveModel()
+            {
+                Filters = "Created#<=2020-01-01"
+            };
+
+            var result = _processor.Apply(model, _posts);
+
+            Assert.AreEqual(result.ElementAt(0).Id, 0);
+            Assert.AreEqual(result.ElementAt(1).Id, 1);
+            Assert.IsTrue(result.Count() == 2);
+        }
+
+        [TestMethod]
+        public void DateGreaterThanMatchesDateTimeWithOrWithoutTimeComponent()
+        {
+            var model = new SieveModel()
+            {
+                Filters = "Created#>2020-01-01"
+            };
+
+            var result = _processor.Apply(model, _posts);
+
+            Assert.AreEqual(result.ElementAt(0).Id, 2);
+            Assert.AreEqual(result.ElementAt(1).Id, 3);
+            Assert.IsTrue(result.Count() == 2);
+        }
+
+        [TestMethod]
+        public void DateLessThanMatchesDateTimeWithOrWithoutTimeComponent()
+        {
+            var model = new SieveModel()
+            {
+                Filters = "Created#<2020-01-02"
+            };
+
+            var result = _processor.Apply(model, _posts);
+
+            Assert.AreEqual(result.ElementAt(0).Id, 0);
+            Assert.AreEqual(result.ElementAt(1).Id, 1);
+            Assert.IsTrue(result.Count() == 2);
         }
 
         [TestMethod]

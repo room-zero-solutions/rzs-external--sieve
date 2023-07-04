@@ -11,6 +11,11 @@ namespace RzsSieve.Models
         private const string EscapedPipePattern = @"(?<!($|[^\\])(\\\\)*?\\)\|";
 
         private static readonly string[] Operators = new string[] {
+                    "#=",
+                    "#>=",
+                    "#<=",
+                    "#>",
+                    "#<",
                     "!@=*",
                     "!_=*",
                     "!=*",
@@ -75,6 +80,16 @@ namespace RzsSieve.Models
                 case "_=":
                 case "!_=":
                     return FilterOperator.StartsWith;
+                case "#=":
+                    return FilterOperator.DateEquals;
+                case "#>=":
+                    return FilterOperator.DateGreaterThanOrEqualTo;
+                case "#<=":
+                    return FilterOperator.DateLessThanOrEqualTo;
+                case "#>":
+                    return FilterOperator.DateGreaterThan;
+                case "#<":
+                    return FilterOperator.DateLessThan;
                 default:
                     return FilterOperator.Equals;
             }

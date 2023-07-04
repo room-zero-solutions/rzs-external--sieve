@@ -29,5 +29,8 @@ namespace RzsSieveUnitTests.Entities
 
         public Comment TopComment { get; set; }
         public Comment FeaturedComment { get; set; }
+
+        [Sieve(CanFilter = true, CanSort = true)]
+        public DateTime Created { get; set; }
     }
 }
