@@ -282,8 +282,31 @@ namespace RzsSieve.Services
             return GetClosureOverConstant(constantVal, property.PropertyType);
         }
 
+        static bool IsNullableType(Type t)
+        {
+            return t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>);
+        }
+
         private static Expression GetExpression(TFilterTerm filterTerm, dynamic filterValue, dynamic propertyValue)
         {
+            if (new[] { 
+                    FilterOperator.DateEquals, 
+                    FilterOperator.DateGreaterThan, 
+                    FilterOperator.DateLessThan,
+                    FilterOperator.DateGreaterThanOrEqualTo,
+                    FilterOperator.DateLessThanOrEqualTo
+                }.Contains(filterTerm.OperatorParsed))
+            {
+                if (IsNullableType(filterValue.Type))
+                {
+                    filterValue = Expression.Convert(filterValue, typeof(DateTime));
+                }
+                if (IsNullableType(propertyValue.Type))
+                {
+                    propertyValue = Expression.Convert(propertyValue, typeof(DateTime));
+                }
+            }
+
             switch (filterTerm.OperatorParsed)
             {
                 case FilterOperator.Equals:
