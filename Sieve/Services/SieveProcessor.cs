@@ -308,6 +308,28 @@ namespace RzsSieve.Services
                         typeof(string).GetMethods()
                         .First(m => m.Name == "StartsWith" && m.GetParameters().Length == 1),
                         filterValue);
+                case FilterOperator.DateEquals:
+                    var nextDayExpression = Expression.Call(filterValue,
+                        typeof(DateTime).GetMethods().First(m => m.Name == "AddDays" && m.GetParameters().Length == 1),
+                        Expression.Constant(1d));
+                    return Expression.And(
+                        Expression.GreaterThanOrEqual(propertyValue, filterValue),
+                        Expression.LessThan(propertyValue, nextDayExpression)
+                    );
+                case FilterOperator.DateGreaterThanOrEqualTo:
+                    return Expression.GreaterThanOrEqual(propertyValue, filterValue);
+                case FilterOperator.DateLessThanOrEqualTo:
+                    nextDayExpression = Expression.Call(filterValue,
+                        typeof(DateTime).GetMethods().First(m => m.Name == "AddDays" && m.GetParameters().Length == 1),
+                        Expression.Constant(1d));
+                    return Expression.LessThan(propertyValue, nextDayExpression);
+                case FilterOperator.DateGreaterThan:
+                    nextDayExpression = Expression.Call(filterValue,
+                        typeof(DateTime).GetMethods().First(m => m.Name == "AddDays" && m.GetParameters().Length == 1),
+                        Expression.Constant(1d));
+                    return Expression.GreaterThanOrEqual(propertyValue, nextDayExpression);
+                case FilterOperator.DateLessThan:
+                    return Expression.LessThan(propertyValue, filterValue);
                 default:
                     return Expression.Equal(propertyValue, filterValue);
             }

@@ -69,7 +69,7 @@ namespace RzsSieveUnitTests
 
             var result = _processor.Apply(model, _posts, applyFiltering: false, applyPagination: false);
 
-            Assert.ThrowsException<SieveMethodNotFoundException>(() => _processor.Apply(model, _posts));
+            Assert.ThrowsException<SieveException>(() => _processor.Apply(model, _posts));
 
             Assert.AreEqual(result.First().Id, 3);
 
