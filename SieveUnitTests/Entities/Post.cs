@@ -31,6 +31,6 @@ namespace RzsSieveUnitTests.Entities
         public Comment FeaturedComment { get; set; }
 
         [Sieve(CanFilter = true, CanSort = true)]
-        public DateTime Created { get; set; }
+        public DateTime? Created { get; set; }
     }
 }
