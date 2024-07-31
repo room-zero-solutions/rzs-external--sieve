@@ -160,9 +160,9 @@ namespace RzsSieve.Services
         }
 
         private IQueryable<TEntity> ApplyFiltering<TEntity>(
-            TSieveModel model,
-            IQueryable<TEntity> result,
-            object[] dataForCustomMethods = null)
+    TSieveModel model,
+    IQueryable<TEntity> result,
+    object[] dataForCustomMethods = null)
         {
             if (model?.GetFiltersParsed() == null)
             {
@@ -197,36 +197,54 @@ namespace RzsSieve.Services
                         var converter = TypeDescriptor.GetConverter(property.PropertyType);
                         foreach (var filterTermValue in filterTerm.Values)
                         {
-                            var isFilterTermValueNull = filterTermValue.ToLower() == nullFilterValue;
-                            var filterValue = isFilterTermValueNull
-                                ? Expression.Constant(null, property.PropertyType)
-                                : ConvertStringValueToConstantExpression(filterTermValue, property, converter);
-
-                            if (filterTerm.OperatorIsCaseInsensitive)
+                            Expression expression = null;
+                            if (filterTermName.StartsWith("IsNullOrEmpty("))
                             {
-                                propertyValue = Expression.Call(propertyValue,
-                                    typeof(string).GetMethods()
-                                    .First(m => m.Name == "ToUpper" && m.GetParameters().Length == 0));
-
-                                filterValue = Expression.Call(filterValue,
-                                    typeof(string).GetMethods()
-                                    .First(m => m.Name == "ToUpper" && m.GetParameters().Length == 0));
+                                expression = Expression.OrElse(
+                                    Expression.Equal(propertyValue, Expression.Constant(null, typeof(string))),
+                                    Expression.Equal(propertyValue, Expression.Constant(string.Empty, typeof(string)))
+                                );
                             }
-
-                            var expression = GetExpression(filterTerm, filterValue, propertyValue);
-
-                            if (filterTerm.OperatorIsNegated)
+                            else if (filterTermName.StartsWith("IsNotNullOrEmpty("))
                             {
-                                expression = Expression.Not(expression);
+                                expression = Expression.AndAlso(
+                                    Expression.NotEqual(propertyValue, Expression.Constant(null, typeof(string))),
+                                    Expression.NotEqual(propertyValue, Expression.Constant(string.Empty, typeof(string)))
+                                );
                             }
-
-                            var filterValueNullCheck = !isFilterTermValueNull && propertyValue.Type.IsNullable()
-                                ? GenerateFilterNullCheckExpression(propertyValue, nullCheck)
-                                : nullCheck;
-
-                            if (filterValueNullCheck != null)
+                            else
                             {
-                                expression = Expression.AndAlso(filterValueNullCheck, expression);
+                                var isFilterTermValueNull = filterTermValue.ToLower() == nullFilterValue;
+                                var filterValue = isFilterTermValueNull
+                                    ? Expression.Constant(null, property.PropertyType)
+                                    : ConvertStringValueToConstantExpression(filterTermValue, property, converter);
+
+                                if (filterTerm.OperatorIsCaseInsensitive)
+                                {
+                                    propertyValue = Expression.Call(propertyValue,
+                                        typeof(string).GetMethods()
+                                        .First(m => m.Name == "ToUpper" && m.GetParameters().Length == 0));
+
+                                    filterValue = Expression.Call(filterValue,
+                                        typeof(string).GetMethods()
+                                        .First(m => m.Name == "ToUpper" && m.GetParameters().Length == 0));
+                                }
+
+                                expression = GetExpression(filterTerm, filterValue, propertyValue);
+
+                                if (filterTerm.OperatorIsNegated)
+                                {
+                                    expression = Expression.Not(expression);
+                                }
+
+                                var filterValueNullCheck = !isFilterTermValueNull && propertyValue.Type.IsNullable()
+                                    ? GenerateFilterNullCheckExpression(propertyValue, nullCheck)
+                                    : nullCheck;
+
+                                if (filterValueNullCheck != null)
+                                {
+                                    expression = Expression.AndAlso(filterValueNullCheck, expression);
+                                }
                             }
 
                             if (innerExpression == null)
@@ -243,11 +261,10 @@ namespace RzsSieve.Services
                     {
                         result = ApplyCustomMethod(result, filterTermName, _customFilterMethods,
                             new object[] {
-                                            result,
-                                            filterTerm.Operator,
-                                            filterTerm.Values
+                                    result,
+                                    filterTerm.Operator,
+                                    filterTerm.Values
                             }, dataForCustomMethods);
-
                     }
                 }
                 if (outerExpression == null)
