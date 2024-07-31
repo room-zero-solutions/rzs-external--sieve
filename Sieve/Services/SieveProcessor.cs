@@ -160,9 +160,9 @@ namespace RzsSieve.Services
         }
 
         private IQueryable<TEntity> ApplyFiltering<TEntity>(
-    TSieveModel model,
-    IQueryable<TEntity> result,
-    object[] dataForCustomMethods = null)
+            TSieveModel model,
+            IQueryable<TEntity> result,
+            object[] dataForCustomMethods = null)
         {
             if (model?.GetFiltersParsed() == null)
             {
@@ -171,6 +171,7 @@ namespace RzsSieve.Services
 
             Expression outerExpression = null;
             var parameter = Expression.Parameter(typeof(TEntity), "e");
+
             foreach (var filterTerm in model.GetFiltersParsed())
             {
                 Expression innerExpression = null;
@@ -198,18 +199,18 @@ namespace RzsSieve.Services
                         foreach (var filterTermValue in filterTerm.Values)
                         {
                             Expression expression = null;
-                            if (filterTermName.StartsWith("IsNullOrEmpty("))
+                            if (filterTerm.Operator.ToLower() == "isnullorempty")
                             {
                                 expression = Expression.OrElse(
-                                    Expression.Equal(propertyValue, Expression.Constant(null, typeof(string))),
-                                    Expression.Equal(propertyValue, Expression.Constant(string.Empty, typeof(string)))
+                                    Expression.Equal(propertyValue, Expression.Constant(null, property.PropertyType)),
+                                    Expression.Equal(propertyValue, Expression.Constant(string.Empty, property.PropertyType))
                                 );
                             }
-                            else if (filterTermName.StartsWith("IsNotNullOrEmpty("))
+                            else if (filterTerm.Operator.ToLower() == "isnotnullorempty")
                             {
                                 expression = Expression.AndAlso(
-                                    Expression.NotEqual(propertyValue, Expression.Constant(null, typeof(string))),
-                                    Expression.NotEqual(propertyValue, Expression.Constant(string.Empty, typeof(string)))
+                                    Expression.NotEqual(propertyValue, Expression.Constant(null, property.PropertyType)),
+                                    Expression.NotEqual(propertyValue, Expression.Constant(string.Empty, property.PropertyType))
                                 );
                             }
                             else
@@ -261,9 +262,9 @@ namespace RzsSieve.Services
                     {
                         result = ApplyCustomMethod(result, filterTermName, _customFilterMethods,
                             new object[] {
-                                    result,
-                                    filterTerm.Operator,
-                                    filterTerm.Values
+                        result,
+                        filterTerm.Operator,
+                        filterTerm.Values
                             }, dataForCustomMethods);
                     }
                 }
