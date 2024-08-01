@@ -187,7 +187,7 @@ namespace RzsSieve.Services
                         {
                             propertyValue = Expression.PropertyOrField(propertyValue, names[i]);
 
-                            if (i != names.Length - 1 && propertyValue.Type.IsNullable())
+                            if (i != names.Length - 1 && propertyValue.Type.IsNullable() && filterTerm.OperatorIsNegated)
                             {
                                 nullCheck = GenerateFilterNullCheckExpression(propertyValue, nullCheck);
                             }
@@ -199,55 +199,39 @@ namespace RzsSieve.Services
                         foreach (var filterTermValue in filterTerm.Values)
                         {
                             Expression expression = null;
-                            if (filterTerm.Operator.ToLower() == "isnullorempty")
+
+                            var isFilterTermValueNull = filterTermValue.ToLower() == nullFilterValue;
+                            var filterValue = isFilterTermValueNull
+                                ? Expression.Constant(null, property.PropertyType)
+                                : ConvertStringValueToConstantExpression(filterTermValue, property, converter);
+
+                            if (filterTerm.OperatorIsCaseInsensitive)
                             {
-                                expression = Expression.OrElse(
-                                    Expression.Equal(propertyValue, Expression.Constant(null, property.PropertyType)),
-                                    Expression.Equal(propertyValue, Expression.Constant(string.Empty, property.PropertyType))
-                                );
-                            }
-                            else if (filterTerm.Operator.ToLower() == "isnotnullorempty")
-                            {
-                                expression = Expression.AndAlso(
-                                    Expression.NotEqual(propertyValue, Expression.Constant(null, property.PropertyType)),
-                                    Expression.NotEqual(propertyValue, Expression.Constant(string.Empty, property.PropertyType))
-                                );
-                            }
-                            else
-                            {
-                                var isFilterTermValueNull = filterTermValue.ToLower() == nullFilterValue;
-                                var filterValue = isFilterTermValueNull
-                                    ? Expression.Constant(null, property.PropertyType)
-                                    : ConvertStringValueToConstantExpression(filterTermValue, property, converter);
+                                propertyValue = Expression.Call(propertyValue,
+                                    typeof(string).GetMethods()
+                                    .First(m => m.Name == "ToUpper" && m.GetParameters().Length == 0));
 
-                                if (filterTerm.OperatorIsCaseInsensitive)
-                                {
-                                    propertyValue = Expression.Call(propertyValue,
-                                        typeof(string).GetMethods()
-                                        .First(m => m.Name == "ToUpper" && m.GetParameters().Length == 0));
-
-                                    filterValue = Expression.Call(filterValue,
-                                        typeof(string).GetMethods()
-                                        .First(m => m.Name == "ToUpper" && m.GetParameters().Length == 0));
-                                }
-
-                                expression = GetExpression(filterTerm, filterValue, propertyValue);
-
-                                if (filterTerm.OperatorIsNegated)
-                                {
-                                    expression = Expression.Not(expression);
-                                }
-
-                                var filterValueNullCheck = !isFilterTermValueNull && propertyValue.Type.IsNullable()
-                                    ? GenerateFilterNullCheckExpression(propertyValue, nullCheck)
-                                    : nullCheck;
-
-                                if (filterValueNullCheck != null)
-                                {
-                                    expression = Expression.AndAlso(filterValueNullCheck, expression);
-                                }
+                                filterValue = Expression.Call(filterValue,
+                                    typeof(string).GetMethods()
+                                    .First(m => m.Name == "ToUpper" && m.GetParameters().Length == 0));
                             }
 
+                            expression = GetExpression(filterTerm, filterValue, propertyValue);
+
+                            if (filterTerm.OperatorIsNegated)
+                            {
+                                expression = Expression.Not(expression);
+                            }
+
+                            var filterValueNullCheck = !isFilterTermValueNull && propertyValue.Type.IsNullable()
+                                ? GenerateFilterNullCheckExpression(propertyValue, nullCheck)
+                                : nullCheck;
+
+                            if (filterValueNullCheck != null)
+                            {
+                                expression = Expression.AndAlso(filterValueNullCheck, expression);
+                            }
+                            
                             if (innerExpression == null)
                             {
                                 innerExpression = expression;
