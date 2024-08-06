@@ -171,7 +171,6 @@ namespace RzsSieve.Services
 
             Expression outerExpression = null;
             var parameter = Expression.Parameter(typeof(TEntity), "e");
-
             foreach (var filterTerm in model.GetFiltersParsed())
             {
                 Expression innerExpression = null;
@@ -197,7 +196,8 @@ namespace RzsSieve.Services
 
                         var converter = TypeDescriptor.GetConverter(property.PropertyType);
                         foreach (var filterTermValue in filterTerm.Values)
-                        { var isFilterTermValueNull = filterTermValue.ToLower() == nullFilterValue;
+                        { 
+                            var isFilterTermValueNull = filterTermValue.ToLower() == nullFilterValue;
                             var filterValue = isFilterTermValueNull
                                 ? Expression.Constant(null, property.PropertyType)
                                 : ConvertStringValueToConstantExpression(filterTermValue, property, converter);
@@ -240,12 +240,13 @@ namespace RzsSieve.Services
                     }
                     else
                     {
-                        result = ApplyCustomMethod(result, filterTermName, _customFilterMethods,
+                        result = ApplyCustomMethod(result, filterTermName, _customFilterMethods, 
                             new object[] {
-                                result,
-                                filterTerm.Operator,
-                                filterTerm.Values
+                                            result,
+                                            filterTerm.Operator,
+                                            filterTerm.Values
                             }, dataForCustomMethods);
+
                     }
                 }
                 if (outerExpression == null)
