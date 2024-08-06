@@ -197,10 +197,7 @@ namespace RzsSieve.Services
 
                         var converter = TypeDescriptor.GetConverter(property.PropertyType);
                         foreach (var filterTermValue in filterTerm.Values)
-                        {
-                            Expression expression = null;
-
-                            var isFilterTermValueNull = filterTermValue.ToLower() == nullFilterValue;
+                        { var isFilterTermValueNull = filterTermValue.ToLower() == nullFilterValue;
                             var filterValue = isFilterTermValueNull
                                 ? Expression.Constant(null, property.PropertyType)
                                 : ConvertStringValueToConstantExpression(filterTermValue, property, converter);
@@ -216,7 +213,7 @@ namespace RzsSieve.Services
                                     .First(m => m.Name == "ToUpper" && m.GetParameters().Length == 0));
                             }
 
-                            expression = GetExpression(filterTerm, filterValue, propertyValue);
+                            var expression = GetExpression(filterTerm, filterValue, propertyValue);
 
                             if (filterTerm.OperatorIsNegated)
                             {
@@ -231,7 +228,6 @@ namespace RzsSieve.Services
                             {
                                 expression = Expression.AndAlso(filterValueNullCheck, expression);
                             }
-                            
                             if (innerExpression == null)
                             {
                                 innerExpression = expression;
@@ -246,9 +242,9 @@ namespace RzsSieve.Services
                     {
                         result = ApplyCustomMethod(result, filterTermName, _customFilterMethods,
                             new object[] {
-                        result,
-                        filterTerm.Operator,
-                        filterTerm.Values
+                                result,
+                                filterTerm.Operator,
+                                filterTerm.Values
                             }, dataForCustomMethods);
                     }
                 }
