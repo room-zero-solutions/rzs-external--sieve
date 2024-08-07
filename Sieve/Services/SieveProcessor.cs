@@ -186,7 +186,7 @@ namespace RzsSieve.Services
                         {
                             propertyValue = Expression.PropertyOrField(propertyValue, names[i]);
 
-                            if (i != names.Length - 1 && propertyValue.Type.IsNullable())
+                            if (i != names.Length - 1 && propertyValue.Type.IsNullable() && filterTerm.OperatorIsNegated)
                             {
                                 nullCheck = GenerateFilterNullCheckExpression(propertyValue, nullCheck);
                             }
