@@ -184,7 +184,7 @@ namespace RzsSieve.Services
                         var names = fullPropertyName.Split('.');
                         for (var i = 0; i < names.Length; i++)
                         {
-                            propertyValue = Expression.PropertyOrField(propertyValue, names[i]);
+                            propertyValue = GetPropertyOrField(propertyValue, names[i]);
 
                             if (i != names.Length - 1 && propertyValue.Type.IsNullable() && filterTerm.OperatorIsNegated)
                             {
@@ -264,6 +264,30 @@ namespace RzsSieve.Services
             return outerExpression == null
                 ? result
                 : result.Where(Expression.Lambda<Func<TEntity, bool>>(outerExpression, parameter));
+        }
+
+        private static Expression GetPropertyOrField(Expression expression, string propertyName)
+        {
+            // Try to resolve as a property or field directly
+            try
+            {
+                return Expression.PropertyOrField(expression, propertyName);
+            }
+            catch (ArgumentException)
+            {
+                // If it fails, check for interfaces
+                var type = expression.Type;
+                var property = type.GetInterfaces()
+                    .SelectMany(i => i.GetProperties())
+                    .FirstOrDefault(p => p.Name == propertyName);
+
+                if (property != null)
+                {
+                    return Expression.Property(expression, property);
+                }
+
+                throw; // Rethrow if property not found
+            }
         }
 
         private static Expression GenerateFilterNullCheckExpression(Expression propertyValue, Expression nullCheckExpression)
