@@ -24,7 +24,7 @@ jobs:
       run: |
         echo "NUGET_AUTH_TOKEN=${{ secrets.MACHINE_REPO_PAT }}" >> $GITHUB_ENV
         echo "Setting up NuGet source..."
-        dotnet nuget add source --name github --username ${{ github.actor }} --password ${{ secrets.MACHINE_REPO_PAT }} --store-password-in-clear-text --source https://nuget.pkg.github.com/room-zero-solutions/index.json
+        dotnet nuget add source https://nuget.pkg.github.com/room-zero-solutions/index.json --name GitHubRoomZero --username USERNAME --password $NUGET_AUTH_TOKEN --store-password-in-clear-text
 
     - name: Restore dependencies
       run: dotnet restore
