@@ -23,6 +23,12 @@ jobs:
       env:
         NUGET_AUTH_TOKEN: ${{ secrets.MACHINE_REPO_PAT }}
 
+    - name: Configure NuGet Source
+      run: dotnet nuget add source https://nuget.pkg.github.com/room-zero-solutions/index.json \
+            --name github \
+            --username ${{ github.actor }} \
+            --password ${{ secrets.MACHINE_REPO_PAT }}
+
     - name: View
       run: |
         ls
@@ -35,6 +41,9 @@ jobs:
 
     - name: View
       run: ls -R
+
+    - name: Verify .nupkg File
+      run: ls ./Sieve/bin/Release/*.nupkg
 
     - name: Publish
       run: dotnet nuget push ./Sieve/bin/Release/*.nupkg --api-key ${{ secrets.MACHINE_REPO_PAT }} --source https://nuget.pkg.github.com/room-zero-solutions/index.json --skip-duplicate
