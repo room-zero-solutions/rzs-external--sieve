@@ -19,25 +19,21 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 8.0.x
-        source-url: https://nuget.pkg.github.com/room-zero-solutions/index.json
-      env:
-        NUGET_AUTH_TOKEN: ${{ secrets.MACHINE_REPO_PAT }}
 
-    - name: View
+    - name: Configure NuGet Auth
       run: |
-        ls
+        echo "NUGET_AUTH_TOKEN=${{ secrets.MACHINE_REPO_PAT }}" >> $GITHUB_ENV
+        echo "Setting up NuGet source..."
+        dotnet nuget add source --name github --username <GITHUB_USERNAME> --password ${{ secrets.MACHINE_REPO_PAT }} --store-password-in-clear-text --source https://nuget.pkg.github.com/room-zero-solutions/index.json
 
     - name: Restore dependencies
-      run: dotnet restore 
-    
+      run: dotnet restore
+
     - name: Build
       run: dotnet build -c Release
-
-    - name: View
-      run: ls -R
 
     - name: Verify .nupkg File
       run: ls ./Sieve/bin/Release/*.nupkg
 
     - name: Publish
-      run: dotnet nuget push ./Sieve/bin/Release/*.nupkg --api-key ${{ secrets.MACHINE_REPO_PAT }} --source https://nuget.pkg.github.com/room-zero-solutions/index.json --skip-duplicate --verbosity detailed
+      run: dotnet nuget push ./Sieve/bin/Release/*.nupkg --source github --skip-duplicate
