@@ -313,6 +313,8 @@ namespace RzsSieve.Services
 
         private static Expression GetExpression(TFilterTerm filterTerm, dynamic filterValue, dynamic propertyValue)
         {
+            var type = (Type)filterValue.Type;
+
             if (new[] { 
                     FilterOperator.DateEquals, 
                     FilterOperator.DateGreaterThan, 
@@ -321,13 +323,13 @@ namespace RzsSieve.Services
                     FilterOperator.DateLessThanOrEqualTo
                 }.Contains(filterTerm.OperatorParsed))
             {
-                if (IsNullableType(filterValue.Type))
+                if (IsNullableType(type))
                 {
-                    filterValue = Expression.Convert(filterValue, typeof(DateTime));
+                    filterValue = Expression.Convert(filterValue, type);
                 }
-                if (IsNullableType(propertyValue.Type))
+                if (IsNullableType(type))
                 {
-                    propertyValue = Expression.Convert(propertyValue, typeof(DateTime));
+                    propertyValue = Expression.Convert(propertyValue, type);
                 }
             }
 
@@ -356,9 +358,7 @@ namespace RzsSieve.Services
                         .First(m => m.Name == "StartsWith" && m.GetParameters().Length == 1),
                         filterValue);
                 case FilterOperator.DateEquals:
-                    var nextDayExpression = Expression.Call(filterValue,
-                        typeof(DateTime).GetMethods().First(m => m.Name == "AddDays" && m.GetParameters().Length == 1),
-                        Expression.Constant(1d));
+                    var nextDayExpression = AddDaysExpression(filterValue, type);
                     return Expression.And(
                         Expression.GreaterThanOrEqual(propertyValue, filterValue),
                         Expression.LessThan(propertyValue, nextDayExpression)
@@ -366,20 +366,29 @@ namespace RzsSieve.Services
                 case FilterOperator.DateGreaterThanOrEqualTo:
                     return Expression.GreaterThanOrEqual(propertyValue, filterValue);
                 case FilterOperator.DateLessThanOrEqualTo:
-                    nextDayExpression = Expression.Call(filterValue,
-                        typeof(DateTime).GetMethods().First(m => m.Name == "AddDays" && m.GetParameters().Length == 1),
-                        Expression.Constant(1d));
+                    nextDayExpression = AddDaysExpression(filterValue, type);
                     return Expression.LessThan(propertyValue, nextDayExpression);
                 case FilterOperator.DateGreaterThan:
-                    nextDayExpression = Expression.Call(filterValue,
-                        typeof(DateTime).GetMethods().First(m => m.Name == "AddDays" && m.GetParameters().Length == 1),
-                        Expression.Constant(1d));
+                    nextDayExpression = AddDaysExpression(filterValue, type);
                     return Expression.GreaterThanOrEqual(propertyValue, nextDayExpression);
                 case FilterOperator.DateLessThan:
                     return Expression.LessThan(propertyValue, filterValue);
                 default:
                     return Expression.Equal(propertyValue, filterValue);
             }
+        }
+
+        private static MethodCallExpression AddDaysExpression(Expression dateExpression, Type type)
+        {
+            var addDaysMethod = type
+                .GetMethods()
+                .First(m => m.Name == "AddDays" && m.GetParameters().Length == 1);
+
+            var argument = type == typeof(DateOnly)
+                ? Expression.Constant(1, typeof(int))
+                : Expression.Constant(1d, typeof(double));
+
+            return Expression.Call(dateExpression, addDaysMethod, argument);
         }
 
         // Workaround to ensure that the filter value gets passed as a parameter in generated SQL from EF Core
