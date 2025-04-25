@@ -313,7 +313,8 @@ namespace RzsSieve.Services
 
         private static Expression GetExpression(TFilterTerm filterTerm, dynamic filterValue, dynamic propertyValue)
         {
-            var type = (Type)filterValue.Type;
+            var type = filterValue.Type;
+            var underlyingType = Nullable.GetUnderlyingType((Type)filterValue.Type) ?? (Type)filterValue.Type;
 
             if (new[] { 
                     FilterOperator.DateEquals, 
@@ -325,11 +326,11 @@ namespace RzsSieve.Services
             {
                 if (IsNullableType(type))
                 {
-                    filterValue = Expression.Convert(filterValue, type);
+                    filterValue = Expression.Convert(filterValue, underlyingType);
                 }
                 if (IsNullableType(type))
                 {
-                    propertyValue = Expression.Convert(propertyValue, type);
+                    propertyValue = Expression.Convert(propertyValue, underlyingType);
                 }
             }
 
@@ -358,7 +359,7 @@ namespace RzsSieve.Services
                         .First(m => m.Name == "StartsWith" && m.GetParameters().Length == 1),
                         filterValue);
                 case FilterOperator.DateEquals:
-                    var nextDayExpression = AddDaysExpression(filterValue, type);
+                    var nextDayExpression = AddDaysExpression(filterValue, underlyingType);
                     return Expression.And(
                         Expression.GreaterThanOrEqual(propertyValue, filterValue),
                         Expression.LessThan(propertyValue, nextDayExpression)
@@ -366,10 +367,10 @@ namespace RzsSieve.Services
                 case FilterOperator.DateGreaterThanOrEqualTo:
                     return Expression.GreaterThanOrEqual(propertyValue, filterValue);
                 case FilterOperator.DateLessThanOrEqualTo:
-                    nextDayExpression = AddDaysExpression(filterValue, type);
+                    nextDayExpression = AddDaysExpression(filterValue, underlyingType);
                     return Expression.LessThan(propertyValue, nextDayExpression);
                 case FilterOperator.DateGreaterThan:
-                    nextDayExpression = AddDaysExpression(filterValue, type);
+                    nextDayExpression = AddDaysExpression(filterValue, underlyingType);
                     return Expression.GreaterThanOrEqual(propertyValue, nextDayExpression);
                 case FilterOperator.DateLessThan:
                     return Expression.LessThan(propertyValue, filterValue);
