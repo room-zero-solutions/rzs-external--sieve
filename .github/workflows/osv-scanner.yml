@@ -1,12 +1,13 @@
 name: OSV-Scanner Push/Scheduled Scan
 
 on:
-  # Nightly scheduled scan
+  pull_request: {}     # all PRs, all branches
+  merge_group: {}      # PR merge queue support
   schedule:
     - cron: "0 1 * * *"
-
-  # Run on all branches for every push
+  # Scan all pushes on all branches
   push:
+    branches: ["**"]
 
 permissions:
   actions: read
