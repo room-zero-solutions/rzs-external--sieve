@@ -1,0 +1,25 @@
+name: OSV-Scanner Push/Scheduled Scan
+
+on:
+  # Nightly scheduled scan
+  schedule:
+    - cron: "0 1 * * *"
+
+  # Run on all branches for every push
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  osv-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run OSV Scanner
+        uses: google/osv-scanner-action@v2.2.1
+        with:
+          scan-args: --recursive .
+          upload-sarif: false   # don’t upload to GitHub Security tab
+          fail-on-vuln: true    # fail if vulnerabilities are found
