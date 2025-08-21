@@ -17,6 +17,6 @@ jobs:
   osv-scan:
     uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@v2.2.1
     with:
-      scan-args: --recursive .
+      scan-args: --format html --recursive .
       upload-sarif: false
       fail-on-vuln: true
