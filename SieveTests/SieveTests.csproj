@@ -4,6 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>RzsSieveTests</AssemblyName>
     <RootNamespace>RzsSieveTests</RootNamespace>
+	
+	<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
 
   <ItemGroup>
