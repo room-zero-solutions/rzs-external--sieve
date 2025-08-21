@@ -2,12 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-
     <IsPackable>false</IsPackable>
-
     <AssemblyName>RzsSieveUnitTests</AssemblyName>
-
     <RootNamespace>RzsSieveUnitTests</RootNamespace>
+
+	<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
 
   <ItemGroup>

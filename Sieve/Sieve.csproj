@@ -25,6 +25,8 @@
     <Product>RzsSieve</Product>
     <RootNamespace>RzsSieve</RootNamespace>
     <AssemblyName>RzsSieve</AssemblyName>
+	
+	  <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
 
   <ItemGroup>
