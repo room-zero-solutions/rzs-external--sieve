@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace RzsSieve.Extensions
 {
-    public static partial class LinqExtensions
+    public static class LinqExtensions
     {
         public static IQueryable<TEntity> OrderByDynamic<TEntity>(
             this IQueryable<TEntity> source,
@@ -42,15 +42,7 @@ namespace RzsSieve.Extensions
 
             foreach (var name in fullPropertyName.Split('.'))
             {
-                try
-                {
-                    propertyValue = Expression.PropertyOrField(propertyValue, name);
-                }
-                catch (ArgumentException)
-                {
-                    // name is not a direct property of field of propertyValue expression. construct a memberAccess then.
-                    propertyValue = Expression.MakeMemberAccess(propertyValue, propertyInfo);
-                }
+                propertyValue = ExpressionExtensions.GetPropertyOrField(propertyValue, name);
 
                 if (propertyValue.Type.IsNullable())
                 {
