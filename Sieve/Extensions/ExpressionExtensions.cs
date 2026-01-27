@@ -1,6 +1,8 @@
 ﻿namespace RzsSieve.Extensions
 {
+    using System;
     using System.Diagnostics.Contracts;
+    using System.Linq;
     using System.Linq.Expressions;
     using System.Text;
 
@@ -51,6 +53,30 @@
             }
 
             return null;
+        }
+
+        public static Expression GetPropertyOrField(Expression expression, string propertyName)
+        {
+            // Try to resolve as a property or field directly
+            try
+            {
+                return Expression.PropertyOrField(expression, propertyName);
+            }
+            catch (ArgumentException)
+            {
+                // If it fails, check for interfaces
+                var type = expression.Type;
+                var property = type.GetInterfaces()
+                    .SelectMany(i => i.GetProperties())
+                    .FirstOrDefault(p => p.Name == propertyName);
+
+                if (property != null)
+                {
+                    return Expression.Property(expression, property);
+                }
+
+                throw; // Rethrow if property not found
+            }
         }
     }
 }
